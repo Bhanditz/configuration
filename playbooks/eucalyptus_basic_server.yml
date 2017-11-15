@@ -26,6 +26,7 @@
       - edx_notes_api
       nginx_default_sites:
       - lms
+      tags: ['nginx_role']
 #    - mysql
     - mysql_init
     - role: memcache
