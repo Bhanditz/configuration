@@ -294,27 +294,38 @@
     - install
     - install:configuration
 
-- name: copy ssl cert
-  copy:
-    src: "{{ NGINX_SSL_CERTIFICATE }}"
-    dest: "/etc/ssl/certs/"
-    owner: root
-    group: root
-    mode: 0644
-  when: ssl_cert.stat.exists and NGINX_ENABLE_SSL and NGINX_SSL_CERTIFICATE != 'ssl-cert-snakeoil.pem'
+- name: Copy SSL cert into variable
+  set_fact:
+    - NGINX_SSL_CERTIFICATE_CONTENT: "{{ lookup('file', NGINX_SSL_CERTIFICATE) }}"
+  when:
+   - NGINX_SSL_CERTIFICATE_CONTENT is not defined
+   - NGINX_SSL_CERTIFICATE != 'ssl-cert-snakeoil.pem'
+   - ssl_cert.stat.exists
   tags:
     - install
     - install:configuration
 
-- name: copy ssl key
-  copy:
-    src: "{{ NGINX_SSL_KEY }}"
-    dest: "/etc/ssl/private/"
-    owner: root
-    group: root
-    mode: 0640
-  when: ssl_key.stat.exists and NGINX_ENABLE_SSL and NGINX_SSL_KEY != 'ssl-cert-snakeoil.key'
+- name: Copy SSL cert into variable
+  set_fact:
+    - NGINX_SSL_KEY_CONTENT: "{{ lookup('file', NGINX_SSL_KEY) }}"
   no_log: True
+  when:
+   - NGINX_SSL_KEY_CONTENT is not defined
+   - NGINX_SSL_KEY != 'ssl-cert-snakeoil.key'
+   - ssl_key.stat.exists
+  tags:
+    - install
+    - install:configuration
+
+- name: Copy SSL cert and keys to server
+  copy:
+
+  no_log: True
+  with_items:
+    - content: "{{ NGINX_SSL_CERTIFICATE_CONTENT }}"
+      exists: "{{ ssl_cert.stat.exists }}"
+    - content: "{{ NGINX_SSL_KEY_CONTENT }}"
+      exists: "{{ ssl_key.stat.exists }}"
   tags:
     - install
     - install:configuration
