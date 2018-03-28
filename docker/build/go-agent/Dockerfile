@@ -65,12 +65,14 @@ RUN printf "\ngo      ALL=(ALL:ALL) NOPASSWD: /usr/bin/pip, /usr/local/bin/pip\n
 # Must upgrade to latest before pinning to work around bug
 # https://github.com/pypa/pip/issues/3862
 RUN \
-  pip install --upgrade pip && \
+  pip install --upgrade pip==9.0.3 && \
+  pip3 install --upgrade pip==9.0.3 && \
   #pip may have moved from /usr/bin/ to /usr/local/bin/. This clears bash's path cache.
   hash -r && \
   pip install --upgrade pip==8.1.2 && \
   # upgrade setuptools early to avoid no distribution errors
-  pip install --upgrade setuptools==24.0.3
+  pip install --upgrade setuptools==39.0.1 && \
+  pip3 install --upgrade setuptools==39.0.1
 
 
 # Install AWS command-line interface - for AWS operations in a go-agent task.
