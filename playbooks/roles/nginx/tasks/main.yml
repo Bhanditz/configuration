@@ -381,6 +381,7 @@
   tags:
     - install
     - install:configuration
+    - nginx:tmp
 
 - name: copy OLD ssl key
   copy:
@@ -407,6 +408,7 @@
   tags:
     - install
     - install:configuration
+    - nginx:tmp
 
 # removing default link
 - name: Removing default nginx config and restart (enabled)
