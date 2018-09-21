@@ -348,6 +348,7 @@
   tags:
     - install
     - install:configuration
+    - nginx:tmp
 
 - local_action:
     module: stat
@@ -357,6 +358,7 @@
   tags:
     - install
     - install:configuration
+    - nginx:tmp
 
 - name: copy OLD ssl cert
   copy:
