@@ -49,6 +49,7 @@
     sudo mysql -D xqueue < staging-asustarbucks-ficus.sql
   args:
     chdir: /home/omar/staging-asustarbucks-ficus-edxapp
+  tags: ['mysql']
 
 - name: Hack, import the database
   shell: >
@@ -60,6 +61,7 @@
     sudo mysql -D xqueue < staging-asustarbucks-ficus.sql
   args:
     chdir: /home/omar/staging-asustarbucks-ficus-edxapp
+  tags: ['mysql']
 
 - name: create database users
   mysql_user:
@@ -222,6 +224,7 @@
     sudo mysql -u root edxapp --execute="INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ('social_auth', '0001_initial', NOW());";
     sudo mysql -u root edxapp --execute="INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ('social_auth', '0002_add_related_name', NOW());";
     sudo mysql -u root edxapp --execute="INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ('social_auth', '0003_alter_email_max_length', NOW());";
+  tags: ['mysql']
 
 - name: Hack, migrate the badges
   shell: >
@@ -230,14 +233,17 @@
     /edx/bin/edxapp-migrate-lms custom_reg_form 0002 --fake;
     /edx/bin/edxapp-migrate-lms custom_reg_form 0001;
     /edx/bin/edxapp-migrate-lms custom_reg_form 0002;
+  tags: ['mysql']
 
 - name: Hack, SQL migrations for python social auth
   shell: >
     sudo mysql -u root edxapp --execute="INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ('social_auth', '0001_initial', NOW());";
     sudo mysql -u root edxapp --execute="INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ('social_auth', '0002_add_related_name', NOW());";
     sudo mysql -u root edxapp --execute="INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ('social_auth', '0003_alter_email_max_length', NOW());";
+  tags: ['mysql']
 
 - name: Hack, run the full migrations
   shell: >
     /edx/bin/edxapp-migrate-lms;
     /edx/bin/edxapp-migrate-cms;
+  tags: ['mysql']
