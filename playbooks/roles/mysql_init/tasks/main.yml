@@ -243,7 +243,7 @@
   become: true
   become_user: edxapp
   shell: >
-    source ~/edxapp_env && cd ~/edx-platform && python manage.py lms --settings=aws_appsembler migrate social_django;
+    source ~/edxapp_env && cd ~/edx-platform && python manage.py lms --settings=aws_appsembler migrate --noinput social_django;
   ignore_errors: True
   tags: ['mysql', 'temp:mysql']
 
@@ -251,7 +251,7 @@
   become: true
   become_user: edxapp
   shell: >
-    source ~/edxapp_env && cd ~/edx-platform && python manage.py lms --settings=aws_appsembler migrate social_django;
+    source ~/edxapp_env && cd ~/edx-platform && python manage.py lms --settings=aws_appsembler migrate --noinput social_django;
   args:
     executable: /bin/bash
   tags: ['mysql', 'temp:mysql']
@@ -260,7 +260,7 @@
   become: true
   become_user: edxapp
   shell: >
-    source ~/edxapp_env && cd ~/edx-platform && python manage.py lms --settings=aws_appsembler migrate badges 0004 --fake;
+    source ~/edxapp_env && cd ~/edx-platform && python manage.py lms --settings=aws_appsembler migrate --noinput badges 0004 --fake;
   args:
     executable: /bin/bash
   tags: ['mysql', 'temp:mysql']
@@ -285,7 +285,7 @@
   become: true
   become_user: edxapp
   shell: >
-    source ~/edxapp_env && cd ~/edx-platform && python manage.py lms --settings=aws_appsembler;
+    source ~/edxapp_env && cd ~/edx-platform && python manage.py lms --settings=aws_appsembler migrate --noinput;
   args:
     executable: /bin/bash
   tags: ['mysql', 'temp:mysql']
@@ -294,7 +294,7 @@
   become: true
   become_user: edxapp
   shell: >
-    source ~/edxapp_env && cd ~/edx-platform && python manage.py cms --settings=aws_appsembler;
+    source ~/edxapp_env && cd ~/edx-platform && python manage.py cms --settings=aws_appsembler migrate --noinput;
   args:
     executable: /bin/bash
   tags: ['mysql', 'temp:mysql']
