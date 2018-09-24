@@ -268,14 +268,14 @@
 #    /edx/bin/edxapp-migrate-lms custom_reg_form 0002;
 #  tags: ['mysql', 'temp:mysql']
 
-- name:Hack, run the full LMS migrations
+- name: Hack, run the full LMS migrations
   become: true
   become_user: edxapp
   shell: >
     source ~/edxapp_env && cd ~/edx-platform && python manage.py lms --settings=aws_appsembler;
   tags: ['mysql', 'temp:mysql']
 
-- name:Hack, run the full CMS migrations
+- name: Hack, run the full CMS migrations
   become: true
   become_user: edxapp
   shell: >
