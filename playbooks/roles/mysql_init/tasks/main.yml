@@ -48,7 +48,6 @@
     mysql -D {{ item.name }} < staging-asustarbucks-ficus-migrated-smch.sql;
   args:
     chdir: /home/omar/staging-asustarbucks-ficus-edxapp
-    executable: /bin/bash
   with_items:
    - name: dashboard
      charset: utf8
