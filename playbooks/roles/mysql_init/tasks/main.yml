@@ -239,10 +239,10 @@
 #    /edx/bin/edxapp-migrate-lms social_django;
 #  tags: ['mysql', 'temp:mysql']
 
-#- name: Hack, migrate the badges
-#  shell: >
-#    /edx/bin/edxapp-migrate-lms badges 0004 --fake;
-#  tags: ['mysql', 'temp:mysql']
+- name: Hack, migrate the badges
+  shell: >
+    /edx/bin/edxapp-migrate-lms badges 0004 --fake;
+  tags: ['mysql', 'temp:mysql']
 
 #- name: Hack, migrate the djcelery
 #  shell: >
@@ -256,8 +256,12 @@
 #    /edx/bin/edxapp-migrate-lms custom_reg_form 0002;
 #  tags: ['mysql', 'temp:mysql']
 
-- name: Hack, run the full migrations
+- name: Hack, run the full LMS migrations
   shell: >
     /edx/bin/edxapp-migrate-lms;
+  tags: ['mysql', 'temp:mysql']
+
+- name: Hack, run the full CMS migrations
+  shell: >
     /edx/bin/edxapp-migrate-cms;
   tags: ['mysql', 'temp:mysql']
