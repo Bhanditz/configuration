@@ -214,6 +214,11 @@
     sudo mysql -u root edxapp --execute='INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ("social_auth", "0003_alter_email_max_length", NOW());';
     sudo mysql -u root edxapp --execute='INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ("social_auth", "0004_auto_20160423_0400", NOW());';
     sudo mysql -u root edxapp --execute='INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ("social_auth", "0005_auto_20160727_2333", NOW());';
+    sudo mysql -u root edxapp --execute='INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ("social_django", "0001_initial", NOW());';
+    sudo mysql -u root edxapp --execute='INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ("social_django", "0002_add_related_name", NOW());';
+    sudo mysql -u root edxapp --execute='INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ("social_django", "0003_alter_email_max_length", NOW());';
+    sudo mysql -u root edxapp --execute='INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ("social_django", "0004_auto_20160423_0400", NOW());';
+    sudo mysql -u root edxapp --execute='INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ("social_django", "0005_auto_20160727_2333", NOW());';
     sudo mysql -u root edxapp --execute='ALTER TABLE social_auth_association ADD UNIQUE KEY `social_auth_association_server_url_17bf7e87f2968244_uniq` (`server_url`,`handle`);';
   tags: ['mysql', 'temp:mysql']
 
