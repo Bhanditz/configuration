@@ -235,19 +235,25 @@
 #  tags: ['mysql', 'temp:mysql']
 
 - name: Hack, migrate the social_auth
+  become: true
+  become_user: edxapp
   shell: >
-    /edx/bin/edxapp-migrate-lms social_django;
+    source ~/edxapp_env && cd ~/edx-platform && python manage.py lms --settings=aws_appsembler migrate social_django;
   ignore_errors: True
   tags: ['mysql', 'temp:mysql']
 
 - name: Hack, migrate the social_auth, again
+  become: true
+  become_user: edxapp
   shell: >
-    /edx/bin/edxapp-migrate-lms social_django;
+    source ~/edxapp_env && cd ~/edx-platform && python manage.py lms --settings=aws_appsembler migrate social_django;
   tags: ['mysql', 'temp:mysql']
 
 - name: Hack, migrate the badges
+  become: true
+  become_user: edxapp
   shell: >
-    /edx/bin/edxapp-migrate-lms badges 0004 --fake;
+    source ~/edxapp_env && cd ~/edx-platform && python manage.py lms --settings=aws_appsembler migrate badges 0004 --fake;
   tags: ['mysql', 'temp:mysql']
 
 #- name: Hack, migrate the djcelery
@@ -262,12 +268,16 @@
 #    /edx/bin/edxapp-migrate-lms custom_reg_form 0002;
 #  tags: ['mysql', 'temp:mysql']
 
-- name: Hack, run the full LMS migrations
+- name:Hack, run the full LMS migrations
+  become: true
+  become_user: edxapp
   shell: >
-    /edx/bin/edxapp-migrate-lms;
+    source ~/edxapp_env && cd ~/edx-platform && python manage.py lms --settings=aws_appsembler;
   tags: ['mysql', 'temp:mysql']
 
-- name: Hack, run the full CMS migrations
+- name:Hack, run the full CMS migrations
+  become: true
+  become_user: edxapp
   shell: >
-    /edx/bin/edxapp-migrate-cms;
+    source ~/edxapp_env && cd ~/edx-platform && python manage.py cms --settings=aws_appsembler;
   tags: ['mysql', 'temp:mysql']
