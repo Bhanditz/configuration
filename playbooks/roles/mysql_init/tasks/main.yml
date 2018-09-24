@@ -43,7 +43,7 @@
   become: yes
   become_user: root
   shell: >
-    mysqladmin -f drop edxapp &&
+    mysql -u root edxapp --execute='DROP DATABASE IF EXISTS `{{ item.name }}`;' &&
     mysql -u root edxapp --execute='CREATE DATABASE `{{ item.name }}` DEFAULT CHARACTER SET {{ item.charset }};' &&
     mysql -D {{ item.name }} < staging-asustarbucks-ficus-migrated-smch.sql;
   args:
