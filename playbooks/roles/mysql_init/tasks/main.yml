@@ -267,16 +267,16 @@
 
 - name: Hack, migrate the djcelery
   shell: >
-    /edx/bin/edxapp-migrate-lms djcelery 0001 --fake;
+    source ~/edxapp_env && cd ~/edx-platform && python manage.py lms --settings=aws_appsembler migrate --noinput djcelery 0001 --fake;
   args:
     executable: /bin/bash
   tags: ['mysql', 'temp:mysql']
 
 #- name: Hack, migrate the custom_reg_form
 #  shell: >
-#    /edx/bin/edxapp-migrate-lms custom_reg_form 0002 --fake;
-#    /edx/bin/edxapp-migrate-lms custom_reg_form 0001;
-#    /edx/bin/edxapp-migrate-lms custom_reg_form 0002;
+#    source ~/edxapp_env && cd ~/edx-platform && python manage.py lms --settings=aws_appsembler migrate --noinput custom_reg_form 0002 --fake;
+#    source ~/edxapp_env && cd ~/edx-platform && python manage.py lms --settings=aws_appsembler migrate --noinput custom_reg_form 0001;
+#    source ~/edxapp_env && cd ~/edx-platform && python manage.py lms --settings=aws_appsembler migrate --noinput custom_reg_form 0002;
 #  args:
 #    executable: /bin/bash
 #  tags: ['mysql', 'temp:mysql']
