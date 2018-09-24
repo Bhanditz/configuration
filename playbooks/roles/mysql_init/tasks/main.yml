@@ -266,6 +266,8 @@
   tags: ['mysql', 'temp:mysql']
 
 - name: Hack, migrate the djcelery
+  become: true
+  become_user: edxapp
   shell: >
     source ~/edxapp_env && cd ~/edx-platform && python manage.py lms --settings=aws_appsembler migrate --noinput djcelery 0001 --fake;
   args:
@@ -273,7 +275,8 @@
   tags: ['mysql', 'temp:mysql']
 
 #- name: Hack, migrate the custom_reg_form
-#  shell: >
+#  become: true
+#  become_user: edxapp#  shell: >
 #    source ~/edxapp_env && cd ~/edx-platform && python manage.py lms --settings=aws_appsembler migrate --noinput custom_reg_form 0002 --fake;
 #    source ~/edxapp_env && cd ~/edx-platform && python manage.py lms --settings=aws_appsembler migrate --noinput custom_reg_form 0001;
 #    source ~/edxapp_env && cd ~/edx-platform && python manage.py lms --settings=aws_appsembler migrate --noinput custom_reg_form 0002;
