@@ -207,28 +207,26 @@
   when: ANALYTICS_PIPELINE_OUTPUT_DATABASE is defined
   tags: ['mysql', 'temp:mysql', 'mysql:users']
 
+# sudo mysql -u root edxapp --execute='INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ("default", "0001_initial", NOW());';
+# sudo mysql -u root edxapp --execute='INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ("default", "0002_add_related_name", NOW());';
+# sudo mysql -u root edxapp --execute='INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ("default", "0003_alter_email_max_length", NOW());';
+# sudo mysql -u root edxapp --execute='INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ("default", "0004_auto_20160423_0400", NOW());';
+# sudo mysql -u root edxapp --execute='INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ("default", "0005_auto_20160727_2333", NOW());';
+# sudo mysql -u root edxapp --execute='INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ("social_auth", "0001_initial", NOW());';
+# sudo mysql -u root edxapp --execute='INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ("social_auth", "0002_add_related_name", NOW());';
+# sudo mysql -u root edxapp --execute='INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ("social_auth", "0003_alter_email_max_length", NOW());';
+# sudo mysql -u root edxapp --execute='INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ("social_auth", "0004_auto_20160423_0400", NOW());';
+# sudo mysql -u root edxapp --execute='INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ("social_auth", "0005_auto_20160727_2333", NOW());';
+
 - name: Hack, SQL migrations for python social auth
   shell: >
-    sudo mysql -u root edxapp --execute='INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ("default", "0001_initial", NOW());';
-    sudo mysql -u root edxapp --execute='INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ("default", "0002_add_related_name", NOW());';
-    sudo mysql -u root edxapp --execute='INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ("default", "0003_alter_email_max_length", NOW());';
-    sudo mysql -u root edxapp --execute='INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ("default", "0004_auto_20160423_0400", NOW());';
-    sudo mysql -u root edxapp --execute='INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ("default", "0005_auto_20160727_2333", NOW());';
-    sudo mysql -u root edxapp --execute='INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ("social_auth", "0001_initial", NOW());';
-    sudo mysql -u root edxapp --execute='INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ("social_auth", "0002_add_related_name", NOW());';
-    sudo mysql -u root edxapp --execute='INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ("social_auth", "0003_alter_email_max_length", NOW());';
-    sudo mysql -u root edxapp --execute='INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ("social_auth", "0004_auto_20160423_0400", NOW());';
-    sudo mysql -u root edxapp --execute='INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ("social_auth", "0005_auto_20160727_2333", NOW());';
+    sudo mysql -u root edxapp --execute='INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ("social_django", "0001_initial", NOW());';
+    sudo mysql -u root edxapp --execute='INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ("social_django", "0002_add_related_name", NOW());';
+    sudo mysql -u root edxapp --execute='INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ("social_django", "0003_alter_email_max_length", NOW());';
+    sudo mysql -u root edxapp --execute='INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ("social_django", "0004_auto_20160423_0400", NOW());';
+    sudo mysql -u root edxapp --execute='INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ("social_django", "0005_auto_20160727_2333", NOW());';
     sudo mysql -u root edxapp --execute='ALTER TABLE social_auth_association ADD UNIQUE KEY `social_auth_association_server_url_17bf7e87f2968244_uniq` (`server_url`,`handle`);';
   tags: ['mysql', 'temp:mysql']
-
-
-# sudo mysql -u root edxapp --execute='INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ("social_django", "0001_initial", NOW());';
-# sudo mysql -u root edxapp --execute='INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ("social_django", "0002_add_related_name", NOW());';
-# sudo mysql -u root edxapp --execute='INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ("social_django", "0003_alter_email_max_length", NOW());';
-# sudo mysql -u root edxapp --execute='INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ("social_django", "0004_auto_20160423_0400", NOW());';
-# sudo mysql -u root edxapp --execute='INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ("social_django", "0005_auto_20160727_2333", NOW());';
-
 
 #- name: Hack, migrate the social_auth
 #  shell: >
@@ -240,26 +238,22 @@
     /edx/bin/edxapp-migrate-lms social_django;
   tags: ['mysql', 'temp:mysql']
 
-- name: Hack, migrate the badges
-  shell: >
-    /edx/bin/edxapp-migrate-lms badges 0004 --fake;
-    /edx/bin/edxapp-migrate-lms djcelery 0001 --fake;
-    /edx/bin/edxapp-migrate-lms custom_reg_form 0002 --fake;
-    /edx/bin/edxapp-migrate-lms custom_reg_form 0001;
-    /edx/bin/edxapp-migrate-lms custom_reg_form 0002;
-  tags: ['mysql', 'temp:mysql']
+#- name: Hack, migrate the badges
+#  shell: >
+#    /edx/bin/edxapp-migrate-lms badges 0004 --fake;
+#  tags: ['mysql', 'temp:mysql']
 
-- name: Hack, migrate the djcelery
-  shell: >
-    /edx/bin/edxapp-migrate-lms djcelery 0001 --fake;
-  tags: ['mysql', 'temp:mysql']
+#- name: Hack, migrate the djcelery
+#  shell: >
+#    /edx/bin/edxapp-migrate-lms djcelery 0001 --fake;
+#  tags: ['mysql', 'temp:mysql']
 
-- name: Hack, migrate the custom_reg_form
-  shell: >
-    /edx/bin/edxapp-migrate-lms custom_reg_form 0002 --fake;
-    /edx/bin/edxapp-migrate-lms custom_reg_form 0001;
-    /edx/bin/edxapp-migrate-lms custom_reg_form 0002;
-  tags: ['mysql', 'temp:mysql']
+#- name: Hack, migrate the custom_reg_form
+#  shell: >
+#    /edx/bin/edxapp-migrate-lms custom_reg_form 0002 --fake;
+#    /edx/bin/edxapp-migrate-lms custom_reg_form 0001;
+#    /edx/bin/edxapp-migrate-lms custom_reg_form 0002;
+#  tags: ['mysql', 'temp:mysql']
 
 - name: Hack, run the full migrations
   shell: >
