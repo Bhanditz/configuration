@@ -226,11 +226,11 @@
     sudo mysql -u root edxapp --execute='INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ("social_django", "0005_auto_20160727_2333", NOW());';
     sudo mysql -u root edxapp --execute='ALTER TABLE social_auth_association ADD UNIQUE KEY `social_auth_association_server_url_17bf7e87f2968244_uniq` (`server_url`,`handle`);';
   tags: ['mysql', 'temp:mysql']
-
-- name: Hack, migrate the social_auth
-  shell: >
-    /edx/bin/edxapp-migrate-lms social_django 0004;
-  tags: ['mysql', 'temp:mysql']
+#
+#- name: Hack, migrate the social_auth
+#  shell: >
+#    /edx/bin/edxapp-migrate-lms social_django 0004;
+#  tags: ['mysql', 'temp:mysql']
 
 - name: Hack, migrate the social_auth, again
   shell: >
