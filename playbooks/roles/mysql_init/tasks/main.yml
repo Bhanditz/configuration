@@ -239,13 +239,13 @@
 #    executable: /bin/bash
 #  tags: ['mysql', 'temp:mysql']
 
-- name: Hack, migrate the social_auth
-  become: true
-  become_user: edxapp
-  shell: >
-    source ~/edxapp_env && cd ~/edx-platform && python manage.py lms --settings=aws_appsembler migrate --noinput social_django;
-  ignore_errors: True
-  tags: ['mysql', 'temp:mysql']
+#- name: Hack, migrate the social_auth
+#  become: true
+#  become_user: edxapp
+#  shell: >
+#    source ~/edxapp_env && cd ~/edx-platform && python manage.py lms --settings=aws_appsembler migrate --noinput social_django;
+#  ignore_errors: True
+#  tags: ['mysql', 'temp:mysql']
 
 - name: Hack, migrate the social_auth, again
   become: true
@@ -265,12 +265,12 @@
     executable: /bin/bash
   tags: ['mysql', 'temp:mysql']
 
-#- name: Hack, migrate the djcelery
-#  shell: >
-#    /edx/bin/edxapp-migrate-lms djcelery 0001 --fake;
-#  args:
-#    executable: /bin/bash
-#  tags: ['mysql', 'temp:mysql']
+- name: Hack, migrate the djcelery
+  shell: >
+    /edx/bin/edxapp-migrate-lms djcelery 0001 --fake;
+  args:
+    executable: /bin/bash
+  tags: ['mysql', 'temp:mysql']
 
 #- name: Hack, migrate the custom_reg_form
 #  shell: >
