@@ -214,10 +214,32 @@
     sudo mysql -u root edxapp --execute='INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ("social_auth", "0003_alter_email_max_length", NOW());';
   tags: ['mysql', 'temp:mysql']
 
+- name: Hack, migrate the social_auth
+  shell: >
+    /edx/bin/edxapp-migrate-lms social_django 0004;
+  tags: ['mysql', 'temp:mysql']
+
+- name: Hack, migrate the social_auth, again
+  shell: >
+    /edx/bin/edxapp-migrate-lms social_django;
+  tags: ['mysql', 'temp:mysql']
+
 - name: Hack, migrate the badges
   shell: >
     /edx/bin/edxapp-migrate-lms badges 0004 --fake;
     /edx/bin/edxapp-migrate-lms djcelery 0001 --fake;
+    /edx/bin/edxapp-migrate-lms custom_reg_form 0002 --fake;
+    /edx/bin/edxapp-migrate-lms custom_reg_form 0001;
+    /edx/bin/edxapp-migrate-lms custom_reg_form 0002;
+  tags: ['mysql', 'temp:mysql']
+
+- name: Hack, migrate the djcelery
+  shell: >
+    /edx/bin/edxapp-migrate-lms djcelery 0001 --fake;
+  tags: ['mysql', 'temp:mysql']
+
+- name: Hack, migrate the custom_reg_form
+  shell: >
     /edx/bin/edxapp-migrate-lms custom_reg_form 0002 --fake;
     /edx/bin/edxapp-migrate-lms custom_reg_form 0001;
     /edx/bin/edxapp-migrate-lms custom_reg_form 0002;
