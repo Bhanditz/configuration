@@ -242,7 +242,6 @@
 - name: Hack, migrate the social_auth
   become: true
   become_user: edxapp
-  executable: /bin/bash
   shell: >
     source ~/edxapp_env && cd ~/edx-platform && python manage.py lms --settings=aws_appsembler migrate social_django;
   ignore_errors: True
