@@ -274,15 +274,16 @@
     executable: /bin/bash
   tags: ['mysql', 'temp:mysql']
 
-#- name: Hack, migrate the custom_reg_form
-#  become: true
-#  become_user: edxapp#  shell: >
-#    source ~/edxapp_env && cd ~/edx-platform && python manage.py lms --settings=aws_appsembler migrate --noinput custom_reg_form 0002 --fake;
-#    source ~/edxapp_env && cd ~/edx-platform && python manage.py lms --settings=aws_appsembler migrate --noinput custom_reg_form 0001;
-#    source ~/edxapp_env && cd ~/edx-platform && python manage.py lms --settings=aws_appsembler migrate --noinput custom_reg_form 0002;
-#  args:
-#    executable: /bin/bash
-#  tags: ['mysql', 'temp:mysql']
+- name: Hack, migrate the custom_reg_form
+  become: true
+  become_user: edxapp
+  shell: >
+    source ~/edxapp_env && cd ~/edx-platform && python manage.py lms --settings=aws_appsembler migrate --noinput custom_reg_form 0002 --fake;
+    source ~/edxapp_env && cd ~/edx-platform && python manage.py lms --settings=aws_appsembler migrate --noinput custom_reg_form 0001;
+    source ~/edxapp_env && cd ~/edx-platform && python manage.py lms --settings=aws_appsembler migrate --noinput custom_reg_form 0002;
+  args:
+    executable: /bin/bash
+  tags: ['mysql', 'temp:mysql']
 
 - name: Hack, run the full LMS migrations
   become: true
