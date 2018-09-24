@@ -16,12 +16,12 @@
     - { content: "{{ mysql_client_key  }}", dest: "{{ mysql_client_key_path }}" }
     - { content: "{{ mysql_ca_cert }}", dest: "{{ mysql_ca_cert_path }}" }
   when: mysql_client_cert != '' and mysql_client_key != '' and mysql_ca_cert != ''
-  tags: ['mysql', 'mysql:tls']
+  tags: ['mysql', 'temp:mysql', 'mysql:tls']
 
 - name: Copy mysql-connect-tls script
   template: src=mysql-connect-tls dest=/usr/local/bin/mysql-connect-tls mode=0755
   when: mysql_client_cert != '' and mysql_client_key != '' and mysql_ca_cert != ''
-  tags: ['mysql', 'mysql:tls']
+  tags: ['mysql', 'temp:mysql', 'mysql:tls']
 
 - name: create databases
   mysql_db:
@@ -37,7 +37,7 @@
     ssl_ca: "{{ (mysql_ca_cert != '') | ternary(mysql_ca_cert_path, omit) }}"
   when: item != None and item != ''
   with_items: "{{ mysql_databases }}"
-  tags: ['mysql', 'mysql:databases']
+  tags: ['mysql', 'temp:mysql', 'mysql:databases']
 
 - name: Hack, import the database
   shell: >
@@ -49,7 +49,7 @@
     sudo mysql -D xqueue < staging-asustarbucks-ficus.sql
   args:
     chdir: /home/omar/staging-asustarbucks-ficus-edxapp
-  tags: ['mysql']
+  tags: ['mysql', 'temp:mysql']
 
 - name: Hack, import the database
   shell: >
@@ -61,7 +61,7 @@
     sudo mysql -D xqueue < staging-asustarbucks-ficus.sql
   args:
     chdir: /home/omar/staging-asustarbucks-ficus-edxapp
-  tags: ['mysql']
+  tags: ['mysql', 'temp:mysql']
 
 - name: create database users
   mysql_user:
@@ -81,7 +81,7 @@
   with_nested:
     - "{{ mysql_database_users }}"
     - "{{ mysql_user_hosts }}"
-  tags: ['mysql', 'mysql:users']
+  tags: ['mysql', 'temp:mysql', 'mysql:users']
 
 - name: setup the migration db user
   mysql_user:
@@ -101,7 +101,7 @@
   with_nested:
     - "{{ mysql_databases }}"
     - "{{ mysql_user_hosts }}"
-  tags: ['mysql', 'mysql:users']
+  tags: ['mysql', 'temp:mysql', 'mysql:users']
 
 - name: create api user for the analytics api
   mysql_user:
@@ -118,7 +118,7 @@
     ssl_ca: "{{ (mysql_ca_cert != '') | ternary(mysql_ca_cert_path, omit) }}"
   with_items: "{{ mysql_user_hosts }}"
   when: ANALYTICS_API_SERVICE_CONFIG is defined
-  tags: ['mysql', 'mysql:users']
+  tags: ['mysql', 'temp:mysql', 'mysql:users']
 
 - name: create read-only reports user for the analytics-api
   mysql_user:
@@ -135,7 +135,7 @@
     ssl_ca: "{{ (mysql_ca_cert != '') | ternary(mysql_ca_cert_path, omit) }}"
   with_items: "{{ mysql_user_hosts }}"
   when: ANALYTICS_API_SERVICE_CONFIG is defined
-  tags: ['mysql', 'mysql:users']
+  tags: ['mysql', 'temp:mysql', 'mysql:users']
 
 - name: create a database for the hive metastore
   mysql_db:
@@ -150,7 +150,7 @@
     ssl_key: "{{ (mysql_client_key != '') | ternary(mysql_client_key_path, omit) }}"
     ssl_ca: "{{ (mysql_ca_cert != '') | ternary(mysql_ca_cert_path, omit) }}"
   when: HIVE_METASTORE_DATABASE is defined
-  tags: ['mysql', 'mysql:databases']
+  tags: ['mysql', 'temp:mysql', 'mysql:databases']
 
 - name: setup the edx-notes-api db user
   mysql_user:
@@ -167,7 +167,7 @@
     ssl_ca: "{{ (mysql_ca_cert != '') | ternary(mysql_ca_cert_path, omit) }}"
   with_items: "{{ mysql_user_hosts }}"
   when: EDX_NOTES_API_MYSQL_DB_USER is defined
-  tags: ['mysql', 'mysql:users']
+  tags: ['mysql', 'temp:mysql', 'mysql:users']
 
 - name: setup the read-only db user
   mysql_user:
@@ -183,7 +183,7 @@
     ssl_key: "{{ (mysql_client_key != '') | ternary(mysql_client_key_path, omit) }}"
     ssl_ca: "{{ (mysql_ca_cert != '') | ternary(mysql_ca_cert_path, omit) }}"
   with_items: "{{ mysql_user_hosts }}"
-  tags: ['mysql', 'mysql:users']
+  tags: ['mysql', 'temp:mysql', 'mysql:users']
 
 - name: setup the admin db user
   mysql_user:
@@ -199,7 +199,7 @@
     ssl_key: "{{ (mysql_client_key != '') | ternary(mysql_client_key_path, omit) }}"
     ssl_ca: "{{ (mysql_ca_cert != '') | ternary(mysql_ca_cert_path, omit) }}"
   with_items: "{{ mysql_user_hosts }}"
-  tags: ['mysql', 'mysql:users']
+  tags: ['mysql', 'temp:mysql', 'mysql:users']
 
 - name: grant access to table storing test data in output database
   mysql_user:
@@ -217,14 +217,14 @@
     ssl_ca: "{{ (mysql_ca_cert != '') | ternary(mysql_ca_cert_path, omit) }}"
   with_items: "{{ mysql_user_hosts }}"
   when: ANALYTICS_PIPELINE_OUTPUT_DATABASE is defined
-  tags: ['mysql', 'mysql:users']
+  tags: ['mysql', 'temp:mysql', 'mysql:users']
 
 - name: Hack, SQL migrations for python social auth
   shell: >
     sudo mysql -u root edxapp --execute="INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ('social_auth', '0001_initial', NOW());";
     sudo mysql -u root edxapp --execute="INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ('social_auth', '0002_add_related_name', NOW());";
     sudo mysql -u root edxapp --execute="INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ('social_auth', '0003_alter_email_max_length', NOW());";
-  tags: ['mysql']
+  tags: ['mysql', 'temp:mysql']
 
 - name: Hack, migrate the badges
   shell: >
@@ -233,17 +233,17 @@
     /edx/bin/edxapp-migrate-lms custom_reg_form 0002 --fake;
     /edx/bin/edxapp-migrate-lms custom_reg_form 0001;
     /edx/bin/edxapp-migrate-lms custom_reg_form 0002;
-  tags: ['mysql']
+  tags: ['mysql', 'temp:mysql']
 
 - name: Hack, SQL migrations for python social auth
   shell: >
     sudo mysql -u root edxapp --execute="INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ('social_auth', '0001_initial', NOW());";
     sudo mysql -u root edxapp --execute="INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ('social_auth', '0002_add_related_name', NOW());";
     sudo mysql -u root edxapp --execute="INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ('social_auth', '0003_alter_email_max_length', NOW());";
-  tags: ['mysql']
+  tags: ['mysql', 'temp:mysql']
 
 - name: Hack, run the full migrations
   shell: >
     /edx/bin/edxapp-migrate-lms;
     /edx/bin/edxapp-migrate-cms;
-  tags: ['mysql']
+  tags: ['mysql', 'temp:mysql']
