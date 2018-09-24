@@ -63,6 +63,8 @@
      charset: utf8
    - db: xqueue
      charset: latin1
+  when:
+    - False
   tags: ['mysql', 'temp:mysql']
 
 - name: create database users
@@ -221,61 +223,14 @@
   when: ANALYTICS_PIPELINE_OUTPUT_DATABASE is defined
   tags: ['mysql', 'temp:mysql', 'mysql:users']
 
-#- name: Hack, SQL migrations for python social auth
-#  shell: >
-#    sudo mysql -u root edxapp --execute='INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ("default", "0001_initial", NOW());';
-#    sudo mysql -u root edxapp --execute='INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ("default", "0002_add_related_name", NOW());';
-#    sudo mysql -u root edxapp --execute='INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ("default", "0003_alter_email_max_length", NOW());';
-#    sudo mysql -u root edxapp --execute='INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ("default", "0004_auto_20160423_0400", NOW());';
-#    sudo mysql -u root edxapp --execute='INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ("default", "0005_auto_20160727_2333", NOW());';
-#
-#    sudo mysql -u root edxapp --execute='INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ("social_auth", "0001_initial", NOW());';
-#    sudo mysql -u root edxapp --execute='INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ("social_auth", "0002_add_related_name", NOW());';
-#    sudo mysql -u root edxapp --execute='INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ("social_auth", "0003_alter_email_max_length", NOW());';
-#    sudo mysql -u root edxapp --execute='INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ("social_auth", "0004_auto_20160423_0400", NOW());';
-#    sudo mysql -u root edxapp --execute='INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ("social_auth", "0005_auto_20160727_2333", NOW());';
-#
-#    sudo mysql -u root edxapp --execute='INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ("social_django", "0001_initial", NOW());';
-#    sudo mysql -u root edxapp --execute='INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ("social_django", "0002_add_related_name", NOW());';
-#    sudo mysql -u root edxapp --execute='INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ("social_django", "0003_alter_email_max_length", NOW());';
-#    sudo mysql -u root edxapp --execute='INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ("social_django", "0004_auto_20160423_0400", NOW());';
-#    sudo mysql -u root edxapp --execute='INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ("social_django", "0005_auto_20160727_2333", NOW());';
-#    sudo mysql -u root edxapp --execute='ALTER TABLE social_auth_association ADD UNIQUE KEY `social_auth_association_server_url_17bf7e87f2968244_uniq` (`server_url`,`handle`);';
-#  args:
-#    executable: /bin/bash
-#  tags: ['mysql', 'temp:mysql']
-
-#- name: Hack, migrate the social_auth
-#  shell: >
-#    /edx/bin/edxapp-migrate-lms social_django 0004;
-#  args:
-#    executable: /bin/bash
-#  tags: ['mysql', 'temp:mysql']
-
-#- name: Hack, migrate the social_auth
-#  become: true
-#  become_user: edxapp
-#  shell: >
-#    source ~/edxapp_env && cd ~/edx-platform && python manage.py lms --settings=aws_appsembler migrate --noinput social_django;
-#  ignore_errors: True
-#  tags: ['mysql', 'temp:mysql']
-
-#- name: Hack, migrate the social_auth, again
-#  become: true
-#  become_user: edxapp
-#  shell: >
-#    source ~/edxapp_env && cd ~/edx-platform;
-#    python manage.py lms --settings=aws_appsembler migrate --noinput social_django;
-#  args:
-#    executable: /bin/bash
-#  tags: ['mysql', 'temp:mysql']
-
 - name: Hack, migrate the badges
   become: true
   become_user: edxapp
   shell: >
     source ~/edxapp_env && cd ~/edx-platform;
     python manage.py lms --settings=aws_appsembler migrate --noinput badges 0004 --fake;
+  when:
+    - False
   args:
     executable: /bin/bash
   tags: ['mysql', 'temp:mysql']
@@ -286,6 +241,8 @@
   shell: >
     source ~/edxapp_env && cd ~/edx-platform;
     python manage.py lms --settings=aws_appsembler migrate --noinput djcelery 0001 --fake;
+  when:
+    - False
   args:
     executable: /bin/bash
   tags: ['mysql', 'temp:mysql']
@@ -300,31 +257,15 @@
     python manage.py lms --settings=aws_appsembler migrate --noinput custom_reg_form 0002;
   args:
     executable: /bin/bash
+  when:
+    - False
   tags: ['mysql', 'temp:mysql']
-
-#- name: Hack, run the full LMS migrations
-#  become: true
-#  become_user: edxapp
-#  shell: >
-#    source ~/edxapp_env && cd ~/edx-platform;
-#    python manage.py lms --settings=aws_appsembler migrate --noinput;
-#  args:
-#    executable: /bin/bash
-#  tags: ['mysql', 'temp:mysql']
-#
-#- name: Hack, run the full CMS migrations
-#  become: true
-#  become_user: edxapp
-#  shell: >
-#    source ~/edxapp_env && cd ~/edx-platform;
-#    python manage.py cms --settings=aws_appsembler migrate --noinput;
-#  args:
-#    executable: /bin/bash
-#  tags: ['mysql', 'temp:mysql']
 
 - name: Hack, run the full {{ item }} migrations
   become: true
   shell: /edx/bin/edxapp-migrate-{{ item }}
+  when:
+    - False
   with_items:
     - lms
     - cms
