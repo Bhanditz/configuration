@@ -43,25 +43,25 @@
   become: yes
   become_user: root
   shell: >
-    mysql -u root edxapp --execute='DROP DATABASE IF EXISTS `{{ item.name }}`;' &&
-    mysql -u root edxapp --execute='CREATE DATABASE `{{ item.name }}` DEFAULT CHARACTER SET {{ item.charset }};' &&
-    mysql -D {{ item.name }} < staging-asustarbucks-ficus-migrated-smch.sql;
+    mysql -u root --execute='DROP DATABASE IF EXISTS `{{ item.db }}`;' &&
+    mysql -u root --execute='CREATE DATABASE `{{ item.db }}` DEFAULT CHARACTER SET {{ item.charset }};' &&
+    mysql -D {{ item.db }} < staging-asustarbucks-ficus-migrated-smch.sql;
   args:
     chdir: /home/omar/staging-asustarbucks-ficus-edxapp
   with_items:
-   - name: dashboard
+   - db: dashboard
      charset: utf8
-   - name: ecommerce
+   - db: ecommerce
      charset: utf8
-   - name: edx_notes_api
+   - db: edx_notes_api
      charset: utf8
-   - name: edxapp
+   - db: edxapp
      charset: latin1
-   - name: edxapp_csmh
+   - db: edxapp_csmh
      charset: utf8
-   - name: reports
+   - db: reports
      charset: utf8
-   - name: xqueue
+   - db: xqueue
      charset: latin1
   tags: ['mysql', 'temp:mysql']
 
