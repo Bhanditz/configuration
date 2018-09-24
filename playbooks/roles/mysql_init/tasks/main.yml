@@ -236,7 +236,7 @@
 
 - name: Hack, migrate the social_auth, again
   shell: >
-    /edx/bin/edxapp-migrate-lms social_django;
+    /edx/bin/edxapp-migrate-lms social_django || /edx/bin/edxapp-migrate-lms social_django;
   tags: ['mysql', 'temp:mysql']
 
 - name: Hack, migrate the badges
