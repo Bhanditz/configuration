@@ -234,7 +234,7 @@
 #    /edx/bin/edxapp-migrate-lms social_django 0004;
 #  tags: ['mysql', 'temp:mysql']
 
-- name: Hack, migrate the social_auth, again
+- name: Hack, migrate the social_auth
   shell: >
     /edx/bin/edxapp-migrate-lms social_django;
   ignore_errors: True
