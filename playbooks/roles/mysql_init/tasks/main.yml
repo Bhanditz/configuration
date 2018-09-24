@@ -39,17 +39,31 @@
   with_items: "{{ mysql_databases }}"
   tags: ['mysql', 'temp:mysql', 'mysql:databases']
 
-- name: Hack, import the database
+- name: Hack, import the databases
+  become: yes
+  become_user: root
   shell: >
-    sudo mysqladmin -f drop edxapp;
-    sudo mysqladmin -f create edxapp;
-    sudo mysql -D edxapp < staging-asustarbucks-ficus-migrated.sql;
-    sudo mysqladmin -f drop xqueue;
-    sudo mysqladmin -f create xqueue;
-    sudo mysql -D xqueue < staging-asustarbucks-ficus-migrated.sql;
+    mysqladmin -f drop edxapp;
+    mysql -u root edxapp --execute='CREATE DATABASE `{{ item.name }}` DEFAULT CHARACTER SET {{ item.charset }};';
+    mysql -D {{ item.name }} < staging-asustarbucks-ficus-migrated-smch.sql;
   args:
     chdir: /home/omar/staging-asustarbucks-ficus-edxapp
     executable: /bin/bash
+  with_items:
+   - name: dashboard
+     charset: utf8
+   - name: ecommerce
+     charset: utf8
+   - name: edx_notes_api
+     charset: utf8
+   - name: edxapp
+     charset: latin1
+   - name: edxapp_csmh
+     charset: utf8
+   - name: reports
+     charset: utf8
+   - name: xqueue
+     charset: latin1
   tags: ['mysql', 'temp:mysql']
 
 - name: create database users
@@ -247,20 +261,22 @@
 #  ignore_errors: True
 #  tags: ['mysql', 'temp:mysql']
 
-- name: Hack, migrate the social_auth, again
-  become: true
-  become_user: edxapp
-  shell: >
-    source ~/edxapp_env && cd ~/edx-platform && python manage.py lms --settings=aws_appsembler migrate --noinput social_django;
-  args:
-    executable: /bin/bash
-  tags: ['mysql', 'temp:mysql']
+#- name: Hack, migrate the social_auth, again
+#  become: true
+#  become_user: edxapp
+#  shell: >
+#    source ~/edxapp_env && cd ~/edx-platform;
+#    python manage.py lms --settings=aws_appsembler migrate --noinput social_django;
+#  args:
+#    executable: /bin/bash
+#  tags: ['mysql', 'temp:mysql']
 
 - name: Hack, migrate the badges
   become: true
   become_user: edxapp
   shell: >
-    source ~/edxapp_env && cd ~/edx-platform && python manage.py lms --settings=aws_appsembler migrate --noinput badges 0004 --fake;
+    source ~/edxapp_env && cd ~/edx-platform;
+    python manage.py lms --settings=aws_appsembler migrate --noinput badges 0004 --fake;
   args:
     executable: /bin/bash
   tags: ['mysql', 'temp:mysql']
@@ -269,7 +285,8 @@
   become: true
   become_user: edxapp
   shell: >
-    source ~/edxapp_env && cd ~/edx-platform && python manage.py lms --settings=aws_appsembler migrate --noinput djcelery 0001 --fake;
+    source ~/edxapp_env && cd ~/edx-platform;
+    python manage.py lms --settings=aws_appsembler migrate --noinput djcelery 0001 --fake;
   args:
     executable: /bin/bash
   tags: ['mysql', 'temp:mysql']
@@ -278,27 +295,38 @@
   become: true
   become_user: edxapp
   shell: >
-    source ~/edxapp_env && cd ~/edx-platform && python manage.py lms --settings=aws_appsembler migrate --noinput custom_reg_form 0002 --fake;
-    source ~/edxapp_env && cd ~/edx-platform && python manage.py lms --settings=aws_appsembler migrate --noinput custom_reg_form 0001;
-    source ~/edxapp_env && cd ~/edx-platform && python manage.py lms --settings=aws_appsembler migrate --noinput custom_reg_form 0002;
+    source ~/edxapp_env && cd ~/edx-platform;
+    python manage.py lms --settings=aws_appsembler migrate --noinput custom_reg_form 0002 --fake;
+    python manage.py lms --settings=aws_appsembler migrate --noinput custom_reg_form 0001;
+    python manage.py lms --settings=aws_appsembler migrate --noinput custom_reg_form 0002;
   args:
     executable: /bin/bash
   tags: ['mysql', 'temp:mysql']
 
-- name: Hack, run the full LMS migrations
-  become: true
-  become_user: edxapp
-  shell: >
-    source ~/edxapp_env && cd ~/edx-platform && python manage.py lms --settings=aws_appsembler migrate --noinput;
-  args:
-    executable: /bin/bash
-  tags: ['mysql', 'temp:mysql']
+#- name: Hack, run the full LMS migrations
+#  become: true
+#  become_user: edxapp
+#  shell: >
+#    source ~/edxapp_env && cd ~/edx-platform;
+#    python manage.py lms --settings=aws_appsembler migrate --noinput;
+#  args:
+#    executable: /bin/bash
+#  tags: ['mysql', 'temp:mysql']
+#
+#- name: Hack, run the full CMS migrations
+#  become: true
+#  become_user: edxapp
+#  shell: >
+#    source ~/edxapp_env && cd ~/edx-platform;
+#    python manage.py cms --settings=aws_appsembler migrate --noinput;
+#  args:
+#    executable: /bin/bash
+#  tags: ['mysql', 'temp:mysql']
 
-- name: Hack, run the full CMS migrations
+- name: Hack, run the full {{ item }} migrations
   become: true
-  become_user: edxapp
-  shell: >
-    source ~/edxapp_env && cd ~/edx-platform && python manage.py cms --settings=aws_appsembler migrate --noinput;
-  args:
-    executable: /bin/bash
+  shell: /edx/bin/edxapp-migrate-{{ item }}
+  with_items:
+    - lms
+    - cms
   tags: ['mysql', 'temp:mysql']
