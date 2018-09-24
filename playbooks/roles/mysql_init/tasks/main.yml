@@ -51,18 +51,6 @@
     chdir: /home/omar/staging-asustarbucks-ficus-edxapp
   tags: ['mysql', 'temp:mysql']
 
-- name: Hack, import the database
-  shell: >
-    sudo mysqladmin -f drop edxapp;
-    sudo mysqladmin -f create edxapp;
-    sudo mysql -D edxapp < staging-asustarbucks-ficus.sql;
-    sudo mysqladmin -f drop xqueue;
-    sudo mysqladmin -f create xqueue;
-    sudo mysql -D xqueue < staging-asustarbucks-ficus.sql
-  args:
-    chdir: /home/omar/staging-asustarbucks-ficus-edxapp
-  tags: ['mysql', 'temp:mysql']
-
 - name: create database users
   mysql_user:
     name: "{{ item[0].user }}"
@@ -221,9 +209,9 @@
 
 - name: Hack, SQL migrations for python social auth
   shell: >
-    sudo mysql -u root edxapp --execute="INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ('social_auth', '0001_initial', NOW());";
-    sudo mysql -u root edxapp --execute="INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ('social_auth', '0002_add_related_name', NOW());";
-    sudo mysql -u root edxapp --execute="INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ('social_auth', '0003_alter_email_max_length', NOW());";
+    sudo mysql -u root edxapp --execute='INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ("social_auth", "0001_initial", NOW());';
+    sudo mysql -u root edxapp --execute='INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ("social_auth", "0002_add_related_name", NOW());';
+    sudo mysql -u root edxapp --execute='INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ("social_auth", "0003_alter_email_max_length", NOW());';
   tags: ['mysql', 'temp:mysql']
 
 - name: Hack, migrate the badges
@@ -233,13 +221,6 @@
     /edx/bin/edxapp-migrate-lms custom_reg_form 0002 --fake;
     /edx/bin/edxapp-migrate-lms custom_reg_form 0001;
     /edx/bin/edxapp-migrate-lms custom_reg_form 0002;
-  tags: ['mysql', 'temp:mysql']
-
-- name: Hack, SQL migrations for python social auth
-  shell: >
-    sudo mysql -u root edxapp --execute="INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ('social_auth', '0001_initial', NOW());";
-    sudo mysql -u root edxapp --execute="INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ('social_auth', '0002_add_related_name', NOW());";
-    sudo mysql -u root edxapp --execute="INSERT INTO django_migrations (`app`, `name`, `applied`) VALUES ('social_auth', '0003_alter_email_max_length', NOW());";
   tags: ['mysql', 'temp:mysql']
 
 - name: Hack, run the full migrations
