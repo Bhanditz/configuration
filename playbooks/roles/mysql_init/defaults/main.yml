@@ -73,6 +73,11 @@ mysql_database_users:
       user: "{{ DISCOVERY_MYSQL_USER | default(None) }}",
       pass: "{{ DISCOVERY_MYSQL_PASSWORD | default(None) }}"
     }
+  - {
+      db: "{{ NOTIFIER_DATABASE_NAME | default(None) }}",
+      user: "{{ NOTIFIER_DATABASE_USER | default(None) }}",
+      pass: "{{ NOTIFIER_DATABASE_PASSWORD | default(None) }}"
+    }
 
 mysql_client_cert: ''
 mysql_client_key: ''
