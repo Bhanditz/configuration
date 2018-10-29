@@ -7,3 +7,7 @@
     virtualenv: "{{ edxapp_venv_dir }}"
   environment: "{{ edxapp_environment }}"
   ignore_errors: yes
+  # this handler only works (and is only needed)
+  # on Tahoe
+  when:
+    - edx_platform_version == "appsembler/amc/master"
