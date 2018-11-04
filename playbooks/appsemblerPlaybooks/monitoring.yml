@@ -17,12 +17,12 @@
     - role: "{{ appsembler_roles }}/logstash"
       when: "LOGSTASH_ENABLED|default(False)"
 
-    - role: "{{ appsembler_roles }}/stackdriver"
-      when: "cloud_provider == 'gcp'"
+#    - role: "{{ appsembler_roles }}/stackdriver"
+#      when: "cloud_provider == 'gcp'"
 
     - "{{ appsembler_roles }}/monit"
 
     - "{{ appsembler_roles }}/snort"
 
-    - role: newrelic
-      when: COMMON_ENABLE_NEWRELIC
+#    - role: newrelic
+#      when: COMMON_ENABLE_NEWRELIC
