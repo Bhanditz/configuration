@@ -124,5 +124,6 @@
     mode: "0644"
   with_items: "{{ motd_files_exist.results }}"
   when:
-    - vagrant_home_dir.stat.exists == False and ansible_distribution in common_debian_variants and item.stat.exists
     - cloud_provider == "aws"
+    - not vagrant_home_dir.stat.exists|default(False)
+    - ansible_distribution in common_debian_variants and item.stat.exists
