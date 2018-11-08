@@ -16,8 +16,8 @@
     COMMON_ENABLE_INSIGHTS: False
     COMMON_ENABLE_OAUTH_CLIENT: False
     COMMON_ENABLE_BACKUPS: True
-    POSTGRESQL_AGGREGATION_INSTALL_CRON: true
-    ENABLE_ECOMMERCE: true
+    POSTGRESQL_AGGREGATION_INSTALL_CRON: True
+    ENABLE_ECOMMERCE: True
   roles:
     - { role: swapfile, SWAPFILE_SIZE: "4GB", tags: ['swapfile_role'] }
     - sudo
@@ -40,6 +40,11 @@
       - edx_notes_api
       nginx_default_sites:
       - lms
+      tags: ['nginx_role']
+    - role: nginx
+      nginx_sites:
+      - ecommerce
+      when: SANDBOX_ENABLE_ECOMMERCE
       tags: ['nginx_role']
     - { role: mysql, tags: ['mysql_role'] }
     - { role: mysql_init, tags: ['mysql_init_role'] }
