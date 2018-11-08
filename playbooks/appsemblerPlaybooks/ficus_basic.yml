@@ -12,12 +12,12 @@
   vars:
     appsembler_roles: "../../../appsembler-roles"
     migrate_db: "yes"
-    SANDBOX_ENABLE_ECOMMERCE: False
+    SANDBOX_ENABLE_ECOMMERCE: True
     COMMON_ENABLE_INSIGHTS: False
     COMMON_ENABLE_OAUTH_CLIENT: False
     COMMON_ENABLE_BACKUPS: True
     POSTGRESQL_AGGREGATION_INSTALL_CRON: true
-    ENABLE_ECOMMERCE: false
+    ENABLE_ECOMMERCE: true
   roles:
     - { role: swapfile, SWAPFILE_SIZE: "4GB", tags: ['swapfile_role'] }
     - sudo
@@ -86,7 +86,7 @@
       when: ENABLE_ECOMMERCE
       tags: ['ecommerce_theme_role']
     - role: appsembler_reporting
-      when: 
+      when:
         - "EDXAPP_APPSEMBLER_FEATURES.ENABLE_APPSEMBLER_REPORTING|default(false)"
         - "COMMON_ENVIRONMENT == 'prod'"
       tags: ['appsembler_reporting_role']
