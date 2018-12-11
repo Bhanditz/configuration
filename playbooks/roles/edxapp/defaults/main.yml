@@ -1653,3 +1653,7 @@ EDXAPP_ENABLE_DJANGO_ADMIN_RESTRICTION: false
 
 # TODO: cherry pick this in from https://github.com/appsembler/configuration/pull/178
 private_requirements_file: "{{ edxapp_app_dir }}/customer_private_requirements.txt"
+
+## Appsembler custom:
+## enable/skip the i18n step
+enable_compile_i18n: true
