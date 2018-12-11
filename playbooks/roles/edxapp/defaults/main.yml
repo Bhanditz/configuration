@@ -1656,4 +1656,4 @@ private_requirements_file: "{{ edxapp_app_dir }}/customer_private_requirements.t
 
 ## Appsembler custom:
 ## enable/skip the i18n step
-enable_compile_i18n: true
+ENABLE_COMPILEMESSAGES: true
