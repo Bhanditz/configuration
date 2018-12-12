@@ -46,7 +46,6 @@
   roles:
     - { role: swapfile, SWAPFILE_SIZE: "2GB" }
     - role: sudo
-    - custom_domains # This gets a list of custom domains
     - role: "{{ appsembler_roles }}/gcsfuse"
     - mysql_init
     # - role: nginx
@@ -75,6 +74,7 @@
       when: COMMON_ENABLE_DATADOG
     - role: splunkforwarder
       when: COMMON_ENABLE_SPLUNKFORWARDER
+    - custom_domains # This gets a list of custom domains
     - { role: "{{ appsembler_roles }}/letsencrypt", letsencrypt_run: false }
 
 - name: Install xqueue, notifier and rabbitmq on services node
