@@ -11,6 +11,8 @@
     var: EDXAPP_SETTINGS
 - debug:
     var: edxapp_code_dir
+- debug:
+    var: groups
     
 - name: Fetch custom domains list
   shell: >
