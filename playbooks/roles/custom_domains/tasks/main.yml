@@ -6,11 +6,11 @@
     - custom_domains:get_domains
 
 - debug:
-    msg: "venv bin: {{ edxapp_venv_bin }}"
+    var: edxapp_venv_bin
 - debug:
-    msg: "settings: {{ EDXAPP_SETTINGS }}"
+    var: EDXAPP_SETTINGS
 - debug:
-    msg: "code dir: {{ edxapp_code_dir }}"
+    var: edxapp_code_dir
     
 - name: Fetch custom domains list
   shell: >
