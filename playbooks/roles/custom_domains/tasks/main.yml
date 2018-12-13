@@ -21,7 +21,7 @@
   become_user: "{{ edxapp_user }}"
   register: custom_domains_cmd
   run_once: True
-  delegate_to: "{{ groups['edx'][0] }}"
+  delegate_to: "{{ groups['edx'][1] }}"
   tags:
     - custom_domains
     - custom_domains:get_domains
