@@ -26,6 +26,9 @@
     - custom_domains
     - custom_domains:get_domains
 
+- debug:
+    var: custom_domains_cmd.out
+
 # - name: "Fetch custom domains list"
 #   become_user: "{{ edxapp_user }}"
 #   django_manage:
