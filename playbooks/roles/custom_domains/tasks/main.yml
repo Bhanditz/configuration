@@ -27,7 +27,7 @@
     - custom_domains:get_domains
 
 - debug:
-    var: custom_domains_cmd.out
+    var: custom_domains_cmd
 
 # - name: "Fetch custom domains list"
 #   become_user: "{{ edxapp_user }}"
